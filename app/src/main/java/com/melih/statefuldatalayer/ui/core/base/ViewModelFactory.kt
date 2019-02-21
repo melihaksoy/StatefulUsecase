@@ -11,6 +11,7 @@ class ViewModelFactory @Inject constructor(val viewModelMap: @JvmSuppressWildcar
         val provider = viewModelMap[modelClass]
             ?: throw IllegalArgumentException("Unknown view model")
 
+        @Suppress("UNCHECKED_CAST")
         return provider.get() as T
     }
 

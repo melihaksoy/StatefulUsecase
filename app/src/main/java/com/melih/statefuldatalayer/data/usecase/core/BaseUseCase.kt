@@ -1,28 +1,25 @@
 package com.melih.statefuldatalayer.data.usecase.core
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.melih.statefuldatalayer.data.entities.Entity
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseUseCase<out T, in Params> : CoroutineScope {
+typealias SimpleResult = Result<Entity, Error>
+
+abstract class BaseUseCase<in Params> : CoroutineScope {
 
     // region Members
     private val parentJob = SupervisorJob()
     private val mainDispatcher = Dispatchers.Main
     private val backgroundDispatcher = Dispatchers.Default
+    protected val _resultChannel = Channel<SimpleResult>(10)
+
+    val receiveChannel: ReceiveChannel<SimpleResult> = _resultChannel
 
     override val coroutineContext: CoroutineContext
         get() = parentJob + mainDispatcher
-
-    val result: LiveData<out Result<T, Error>>
-        get() = _result
-
-    val state: LiveData<State>
-        get() = _state
-
-    abstract protected val _result: MutableLiveData<out Result<T, Error>>
-    abstract protected val _state: MutableLiveData<State>
 
     // endregion
 
