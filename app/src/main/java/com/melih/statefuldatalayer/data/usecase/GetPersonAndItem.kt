@@ -5,6 +5,7 @@ import com.melih.statefuldatalayer.data.sources.PersistenceSource
 import com.melih.statefuldatalayer.data.usecase.core.BaseUseCase
 import com.melih.statefuldatalayer.data.usecase.core.None
 import com.melih.statefuldatalayer.data.usecase.core.Result
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlin.random.Random
@@ -46,7 +47,7 @@ class GetPersonAndItem @Inject constructor(
                 }
 
                 // Starting network async
-                startAsync {
+                val itemNetworkAsync = startAsync {
                     delay(Random.nextLong(1000, 3000))
                     resultChannel.send(networkSource.getItems(it.id))
 
@@ -54,10 +55,12 @@ class GetPersonAndItem @Inject constructor(
                     if (itemPersistenceAsync.isActive)
                         itemPersistenceAsync.cancel()
                 }
+
+                awaitAll(itemPersistenceAsync, itemNetworkAsync)
+
+                // Hey, I'm done !
+                resultChannel.send(Result.State.Loaded())
             }
         }
-
-        // Hey, I'm done !
-        resultChannel.send(Result.State.Loaded())
     }
 }
