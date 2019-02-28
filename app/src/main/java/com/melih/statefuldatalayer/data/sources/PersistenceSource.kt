@@ -14,7 +14,7 @@ class PersistenceSource @Inject constructor() : Repository {
      */
     override fun getPerson(): Result<PersonEntity, Error> =
         if (Random.nextFloat() > 0.8f) {
-            Result.Failure(Error.ResponseError())
+            Result.Failure(Error.PersistenceError())
         } else {
             Result.Success(PersonEntity(0, "Persistence", "Source"))
         }
@@ -24,7 +24,7 @@ class PersistenceSource @Inject constructor() : Repository {
      */
     override fun getItems(personId: Int): Result<ItemEntity, Error> =
         if (Random.nextFloat() > 0.8f) {
-            Result.Failure(Error.ResponseError())
+            Result.Failure(Error.PersistenceError())
         } else {
             Result.Success(ItemEntity("Offline !"))
         }

@@ -22,12 +22,12 @@ class GetPersonAndItem @Inject constructor(
         resultChannel.send(Result.State.Loading())
 
         // Get person from persistence and send it, synchronous
-        resultChannel.send(persistenceSource.getPerson())
         delay(1000)
+        resultChannel.send(persistenceSource.getPerson())
 
         // Get person from network and send it, synchronous
-        val personFromNetwork = networkSource.getPerson()
         delay(2000)
+        val personFromNetwork = networkSource.getPerson()
         resultChannel.send(personFromNetwork)
 
         personFromNetwork.handleResult {

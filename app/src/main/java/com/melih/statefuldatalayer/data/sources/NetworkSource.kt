@@ -3,7 +3,6 @@ package com.melih.statefuldatalayer.data.sources
 import com.melih.statefuldatalayer.data.entities.ItemEntity
 import com.melih.statefuldatalayer.data.entities.PersonEntity
 import com.melih.statefuldatalayer.data.usecase.core.Error
-import com.melih.statefuldatalayer.data.usecase.core.Error.ResponseError
 import com.melih.statefuldatalayer.data.usecase.core.Result
 import javax.inject.Inject
 import kotlin.random.Random
@@ -16,7 +15,7 @@ class NetworkSource @Inject constructor() : Repository {
      */
     override fun getPerson(): Result<PersonEntity, Error> =
         if (Random.nextFloat() > 0.8f) {
-            Result.Failure(ResponseError())
+            Result.Failure(Error.NetworkError())
         } else {
             Result.Success(PersonEntity(0, "Network", "Source"))
         }
@@ -26,7 +25,7 @@ class NetworkSource @Inject constructor() : Repository {
      */
     override fun getItems(personId: Int): Result<ItemEntity, Error> =
         if (Random.nextFloat() > 0.8f) {
-            Result.Failure(ResponseError())
+            Result.Failure(Error.NetworkError())
         } else {
             Result.Success(ItemEntity("Online !"))
         }
