@@ -14,7 +14,7 @@ abstract class BaseUseCase<in Params> : CoroutineScope {
     private val parentJob = SupervisorJob()
     private val mainDispatcher = Dispatchers.Main
     private val backgroundDispatcher = Dispatchers.Default
-    protected val _resultChannel = Channel<SimpleResult>(10)
+    protected val _resultChannel = Channel<SimpleResult>()
 
     val receiveChannel: ReceiveChannel<SimpleResult> = _resultChannel
 

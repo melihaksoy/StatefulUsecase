@@ -1,4 +1,4 @@
 package com.melih.statefuldatalayer.data.entities
 
-interface Entity {
+abstract class Entity {
 }
