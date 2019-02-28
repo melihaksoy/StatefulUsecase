@@ -9,7 +9,7 @@ sealed class Result<out T, out R> {
         class Loaded : State()
     }
 
-    fun handleResult(successBlock: (T) -> Unit, failureBlock: (R) -> Unit, stateBlock: (State) -> Unit) {
+    fun handleResult(stateBlock: (State) -> Unit = {}, failureBlock: (R) -> Unit = {}, successBlock: (T) -> Unit = {}) {
         when (this) {
             is Success -> successBlock(successData)
             is Failure -> failureBlock(errorData)

@@ -1,7 +1,9 @@
 package com.melih.statefuldatalayer.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import com.melih.statefuldatalayer.R
 import com.melih.statefuldatalayer.databinding.MainBinding
@@ -21,6 +23,7 @@ class MainActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var factory: ViewModelFactory
 
+    private var mutableLiveData = MutableLiveData<Int>()
     private var liveDataChannel = LiveDataChannel<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,23 +40,38 @@ class MainActivity : DaggerAppCompatActivity() {
             delay(2000)
             withContext(Dispatchers.Default) {
                 async {
-                    repeat(5) {
-                        liveDataChannel.postValue(it)
-                        delay(35)
+                    repeat(10) {
+//                        liveDataChannel.postValue(it)
+//                        mutableLiveData.postValue(it)
                     }
                 }
 
                 async {
-                    repeat(5) {
-                        liveDataChannel.postValue(it + 5)
-                        delay(25)
+                    repeat(10) {
+//                        liveDataChannel.postValue(it + 10)
+//                        mutableLiveData.postValue(it + 10)
                     }
+                }
+            }
+
+            liveDataChannel.postValue(10)
+
+            withContext(Dispatchers.Main){
+                delay(1000)
+                observe(liveDataChannel){
+                    Log.w("Channel1", "Received: $it")
                 }
             }
         }
 
-        observe(liveDataChannel){
-            println("Received: $it")
+//        liveDataChannel.postValue(10)
+//
+//        observe(liveDataChannel){
+//            Log.w("Channel1", "Received: $it")
+//        }
+
+        observe(mutableLiveData) {
+            Log.w("Channel2", "Received: $it")
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.melih.statefuldatalayer.data.entities
 
-data class InventoryEntity(
+data class ItemEntity(
     val itemName: String = "Simple Item"
-) : Entity {
+) : Entity() {
     override fun toString(): String {
         return itemName
     }

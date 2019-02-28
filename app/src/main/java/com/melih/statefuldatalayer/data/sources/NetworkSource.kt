@@ -1,7 +1,6 @@
 package com.melih.statefuldatalayer.data.sources
 
-import com.melih.statefuldatalayer.data.Repository
-import com.melih.statefuldatalayer.data.entities.InventoryEntity
+import com.melih.statefuldatalayer.data.entities.ItemEntity
 import com.melih.statefuldatalayer.data.entities.PersonEntity
 import com.melih.statefuldatalayer.data.usecase.core.Error
 import com.melih.statefuldatalayer.data.usecase.core.Error.ResponseError
@@ -19,16 +18,16 @@ class NetworkSource @Inject constructor() : Repository {
         if (Random.nextFloat() > 0.8f) {
             Result.Failure(ResponseError())
         } else {
-            Result.Success(PersonEntity("Network", "Source"))
+            Result.Success(PersonEntity(0, "Network", "Source"))
         }
 
     /**
      * Assume this function fetches response from network
      */
-    override fun getItems(): Result<InventoryEntity, Error> =
+    override fun getItems(personId: Int): Result<ItemEntity, Error> =
         if (Random.nextFloat() > 0.8f) {
             Result.Failure(ResponseError())
         } else {
-            Result.Success(InventoryEntity("Online !"))
+            Result.Success(ItemEntity("Online !"))
         }
 }

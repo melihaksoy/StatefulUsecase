@@ -14,9 +14,9 @@ abstract class BaseUseCase<in Params> : CoroutineScope {
     private val parentJob = SupervisorJob()
     private val mainDispatcher = Dispatchers.Main
     private val backgroundDispatcher = Dispatchers.Default
-    protected val _resultChannel = Channel<SimpleResult>()
+    protected val resultChannel = Channel<SimpleResult>()
 
-    val receiveChannel: ReceiveChannel<SimpleResult> = _resultChannel
+    val receiveChannel: ReceiveChannel<SimpleResult> = resultChannel
 
     override val coroutineContext: CoroutineContext
         get() = parentJob + mainDispatcher
@@ -37,7 +37,7 @@ abstract class BaseUseCase<in Params> : CoroutineScope {
         }
     }
 
-    protected fun <T> doAsync(block: suspend () -> T): Deferred<T> = async(parentJob) {
+    protected fun <T> startAsync(block: suspend () -> T): Deferred<T> = async(parentJob) {
         block()
     }
 
@@ -46,6 +46,7 @@ abstract class BaseUseCase<in Params> : CoroutineScope {
      * This will ensure coroutine is cancelled if it's still running some tasks
      */
     fun clear() {
+        resultChannel.close()
         parentJob.cancel()
     }
     // endregion

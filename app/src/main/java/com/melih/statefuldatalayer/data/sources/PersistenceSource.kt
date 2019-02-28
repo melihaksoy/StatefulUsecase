@@ -1,7 +1,6 @@
 package com.melih.statefuldatalayer.data.sources
 
-import com.melih.statefuldatalayer.data.Repository
-import com.melih.statefuldatalayer.data.entities.InventoryEntity
+import com.melih.statefuldatalayer.data.entities.ItemEntity
 import com.melih.statefuldatalayer.data.entities.PersonEntity
 import com.melih.statefuldatalayer.data.usecase.core.Error
 import com.melih.statefuldatalayer.data.usecase.core.Result
@@ -17,16 +16,20 @@ class PersistenceSource @Inject constructor() : Repository {
         if (Random.nextFloat() > 0.8f) {
             Result.Failure(Error.ResponseError())
         } else {
-            Result.Success(PersonEntity("Persistence", "Source"))
+            Result.Success(PersonEntity(0, "Persistence", "Source"))
         }
 
     /**
      * Assume this function fetches response from network
      */
-    override fun getItems(): Result<InventoryEntity, Error> =
+    override fun getItems(personId: Int): Result<ItemEntity, Error> =
         if (Random.nextFloat() > 0.8f) {
             Result.Failure(Error.ResponseError())
         } else {
-            Result.Success(InventoryEntity("Offline !"))
+            Result.Success(ItemEntity("Offline !"))
         }
+
+    fun savePerson(person: PersonEntity) {
+        // Save person
+    }
 }
